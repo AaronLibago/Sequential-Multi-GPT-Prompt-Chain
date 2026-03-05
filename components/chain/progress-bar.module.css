@@ -1,0 +1,101 @@
+.progressSection {
+  margin-bottom: 2rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.progressTitle {
+  font-size: 1.2rem;
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 1rem;
+}
+
+.stageIndicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 80px;
+}
+
+.stageLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: color var(--transition);
+}
+
+.stageDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-border);
+  transition: background var(--transition);
+}
+
+.stageConnector {
+  width: 32px;
+  height: 2px;
+  background: var(--color-border);
+  margin-bottom: 1.4rem;
+  transition: background var(--transition);
+}
+
+.stageConnector.completed {
+  background: var(--color-text-muted);
+}
+
+/* Active states */
+.stageIndicator.active .stageDot {
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+.stageIndicator.active .stageLabel,
+.stageIndicator.completed .stageLabel {
+  color: var(--color-text);
+}
+
+/* Stage colors */
+.stageIndicator.active[data-stage="strategist"] .stageDot,
+.stageIndicator.completed[data-stage="strategist"] .stageDot { background: var(--color-strategist); }
+
+.stageIndicator.active[data-stage="analyst"] .stageDot,
+.stageIndicator.completed[data-stage="analyst"] .stageDot { background: var(--color-analyst); }
+
+.stageIndicator.active[data-stage="copywriter"] .stageDot,
+.stageIndicator.completed[data-stage="copywriter"] .stageDot { background: var(--color-copywriter); }
+
+.stageIndicator.active[data-stage="skeptic"] .stageDot,
+.stageIndicator.completed[data-stage="skeptic"] .stageDot { background: var(--color-skeptic); }
+
+.stageIndicator.active[data-stage="operator"] .stageDot,
+.stageIndicator.completed[data-stage="operator"] .stageDot { background: var(--color-operator); }
+
+.progressText {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 640px) {
+  .progressBar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  .stageConnector {
+    display: none;
+  }
+  .stageIndicator {
+    min-width: 60px;
+  }
+}

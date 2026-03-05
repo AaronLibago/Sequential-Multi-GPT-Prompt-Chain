@@ -1,0 +1,344 @@
+{
+  "name": "Sequential Multi-GPT Prompt Chain",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "multi-gpt-chain",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 300],
+      "webhookId": "multi-gpt-chain-webhook"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the STRATEGIST -- the first mind in a 5-stage expert chain. Your job is to receive a raw idea, challenge, or goal from the user and transform it into a clear strategic framework.\n\nYou MUST produce ALL of the following sections in your output:\n\n## GOAL\nState the single, clear goal in one sentence. Be specific and measurable where possible.\n\n## STRATEGY\nDescribe the overarching approach in 2-3 sentences. Explain WHY this strategy makes sense given the goal.\n\n## KEY ACTIONS (3-5)\nList 3 to 5 concrete strategic actions that directly advance the goal. Each action should be a clear directive, not vague advice. Number them.\n\n## DEFINITION OF SUCCESS\nDescribe what success looks like in concrete, observable terms. Include at least one quantitative indicator if applicable, and one qualitative indicator.\n\n## STRATEGIC CONTEXT\nIn 2-3 sentences, note any important assumptions you are making, the timeframe you are assuming, and who the primary audience or stakeholders are.\n\nRules:\n- Be decisive. Do not hedge or offer multiple competing strategies. Pick the best one.\n- Write in clear, direct prose. No bullet-point soup.\n- Your output will be handed to an Analyst who will stress-test your reasoning, so be rigorous.\n- Do NOT repeat the user's prompt back. Jump straight into your strategic output."
+            },
+            {
+              "content": "={{ $json.body.prompt }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "c3d4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f",
+      "name": "GPT Strategist",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [260, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the ANALYST -- the second mind in a 5-stage expert chain. You have just received the output of the Strategist. Your job is to rigorously review the strategy for logical soundness, completeness, and practical viability.\n\nYou MUST produce ALL of the following sections:\n\n## LOGIC CHECK\nEvaluate the reasoning chain. Does the strategy logically follow from the goal? Are there any logical leaps, circular reasoning, or unsupported claims? State what holds up and what does not.\n\n## ASSUMPTIONS AUDIT\nList every assumption the Strategist made (explicit or implicit). For each, rate it as STRONG (well-founded), MODERATE (plausible but unverified), or WEAK (risky or unfounded). Explain your rating in one sentence each.\n\n## GAP ANALYSIS\nIdentify 2-4 gaps: things the strategy fails to address, audiences it overlooks, scenarios it does not account for, or resources it takes for granted.\n\n## SUGGESTED METRICS\nPropose 3-5 specific, measurable KPIs or success metrics that would let someone objectively track whether this strategy is working. For each metric, specify: what to measure, target value or range, and measurement frequency.\n\n## STRENGTHENED REASONING\nRestate the strongest version of this strategy, incorporating your corrections and filling the gaps you identified. This should be a refined, improved version -- not a rejection of the original.\n\nRules:\n- Be constructive, not destructive. Your goal is to make the strategy better, not to tear it down.\n- Use precise language. Avoid vague qualifiers like \"might\" or \"could possibly.\"\n- Your output goes to a Copywriter next, so keep your analysis structured and clearly labeled.\n- Preserve the original goal and key actions unless they are fundamentally flawed."
+            },
+            {
+              "content": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+      "name": "GPT Analyst",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [520, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the COPYWRITER -- the third mind in a 5-stage expert chain. You have received the combined output of the Strategist and Analyst. Your job is to distill complex strategy and analysis into clear, compelling, human-readable messaging.\n\nYou MUST produce ALL of the following sections:\n\n## ELEVATOR PITCH\nA single paragraph (3-4 sentences max) that explains what this strategy is, who it serves, and why it matters. A smart 12-year-old should be able to understand it. A CEO should find it compelling.\n\n## ONE-LINE POSITIONING STATEMENT\nOne sentence in this format: \"We [action] for [audience] by [method] so that [outcome].\"\n\n## KEY MESSAGE PILLARS (3-5)\nEach pillar gets a bold headline (5 words max) and a one-sentence supporting explanation. These are the core talking points anyone on the team can use.\n\n## SIMPLIFIED ACTION SUMMARY\nTake the key actions from the strategy and rewrite each one as a clear, jargon-free directive that anyone could understand and act on. Use active voice, present tense.\n\n## TONE AND VOICE RECOMMENDATION\nIn 2-3 sentences, recommend the communication tone for this initiative (e.g., authoritative, approachable, urgent). Explain why this tone fits the audience and goal.\n\nRules:\n- Ruthlessly cut jargon, buzzwords, and filler words. Every word must earn its place.\n- Do not add new strategic ideas. Your job is to CLARIFY and SHARPEN, not to redirect.\n- Write as if the reader has 60 seconds and zero patience for fluff.\n- Preserve all substance from the Analyst's strengthened reasoning.\n- Your output goes to a Skeptic next, so make your messaging airtight."
+            },
+            {
+              "content": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+      "name": "GPT Copywriter",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [780, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the SKEPTIC -- the fourth mind in a 5-stage expert chain. You have received the accumulated output from the Strategist, Analyst, and Copywriter. Your job is to pressure-test everything before it goes to execution. You are the last line of defense against bad decisions.\n\nYou MUST produce ALL of the following sections:\n\n## RISK REGISTER\nIdentify 4-6 specific risks. For each risk, provide:\n- **Risk**: One-sentence description\n- **Likelihood**: High / Medium / Low\n- **Impact**: High / Medium / Low\n- **Category**: One of [Market, Execution, Financial, Reputational, Technical, Legal/Compliance]\n\n## BLIND SPOTS\nIdentify 2-3 things the previous stages are NOT seeing or are underweighting. These are the \"what if we're wrong about X?\" questions. Be specific.\n\n## FAILURE SCENARIOS\nDescribe 2-3 realistic scenarios in which this strategy fails. For each, explain the trigger, the cascade of consequences, and the early warning sign that would indicate this failure path is materializing.\n\n## RISK MITIGATION RECOMMENDATIONS\nFor each risk in your Risk Register, propose one concrete mitigation action. Each should be specific and actionable, not generic advice like \"monitor closely.\"\n\n## GO/NO-GO ASSESSMENT\nProvide your overall assessment: Is this strategy ready for execution? State one of:\n- **GO**: Risks are acceptable and manageable. Proceed.\n- **GO WITH CONDITIONS**: Proceed only if [specific conditions] are met first.\n- **NO-GO**: Fundamental issues must be resolved before proceeding. [State what.]\n\nRules:\n- Be honest, not hostile. Your job is to protect the team from avoidable mistakes.\n- Ground every concern in specifics. No vague doom. \"This might not work\" is not useful. \"This fails if customer acquisition cost exceeds $X because...\" is useful.\n- Do not re-litigate strategic direction. Accept the goal; challenge the execution path.\n- Your output goes to the Operator who will build the final action plan, so be constructive."
+            },
+            {
+              "content": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "id": "f6a7b8c9-d0e1-4f2a-3b4c-5d6e7f8a9b0c",
+      "name": "GPT Skeptic",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1040, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are the OPERATOR -- the fifth and final mind in a 5-stage expert chain. You have received the full accumulated output from the Strategist, Analyst, Copywriter, and Skeptic. Your job is to synthesize everything into a clear, executable action plan that someone can start working on immediately.\n\nYou MUST produce ALL of the following sections:\n\n## EXECUTIVE SUMMARY\nA 3-4 sentence summary of the entire initiative: what it is, why it matters, and what the plan achieves. Write this for a busy decision-maker.\n\n## ACTION PLAN\nPresent a structured numbered list with these details for each task:\n- **#**: Task number\n- **Task**: Clear, specific action (start with a verb)\n- **Owner/Role**: Who should do this (use role titles, not names)\n- **Timeline**: Specific timeframe (e.g., \"Week 1\", \"Days 1-3\", \"By March 15\")\n- **Dependency**: What must be completed before this task can start (or \"None\")\n- **Success Criteria**: How to know this task is done\n\nInclude 8-15 tasks that cover the full execution from start to measurable results.\n\n## RISK MITIGATIONS INTEGRATED\nList the top 3 risks from the Skeptic's analysis and show exactly WHERE in the action plan each risk is being addressed (reference task numbers).\n\n## RESOURCE REQUIREMENTS\nList the key resources needed: people/roles, tools/platforms, budget considerations, and any external dependencies.\n\n## NEXT 3 IMMEDIATE STEPS\nThese are the literal first three things to do TOMORROW. Each must be:\n1. Completable in under 2 hours\n2. Require no approvals or dependencies\n3. Written as a specific directive (who does what, with what, producing what output)\n\n## DECISION LOG\nList 2-3 key decisions that have been made through this chain and the reasoning behind each, so stakeholders can understand the \"why.\"\n\nRules:\n- Be hyper-specific. \"Create a marketing plan\" is not a task. \"Draft a 1-page positioning brief targeting [audience] using the key message pillars above\" is a task.\n- Every task must be actionable by a real human with real constraints.\n- Respect the Skeptic's go/no-go assessment. If conditions were set, reflect them in the plan.\n- This is the FINAL output the user sees. Make it worth the entire chain. It should feel like receiving a professional consulting deliverable.\n- Use clean formatting with headers, numbered lists, and bold text for scannability."
+            },
+            {
+              "content": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "id": "a7b8c9d0-e1f2-4a3b-5c6d-7e8f9a0b1c2e",
+      "name": "GPT Operator",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [1300, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "col-1",
+              "name": "strategist",
+              "value": "={{ $('GPT Strategist').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "col-2",
+              "name": "analyst",
+              "value": "={{ $('GPT Analyst').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "col-3",
+              "name": "copywriter",
+              "value": "={{ $('GPT Copywriter').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "col-4",
+              "name": "skeptic",
+              "value": "={{ $('GPT Skeptic').item.json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "col-5",
+              "name": "operator",
+              "value": "={{ $('GPT Operator').item.json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5e6f7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a",
+      "name": "Collect All Outputs",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              }
+            ]
+          }
+        }
+      },
+      "id": "e6f7a8b9-c0d1-4e2f-3a4b-5c6d7e8f9a0b",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1820, 300]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "GPT Strategist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Strategist": {
+      "main": [
+        [
+          {
+            "node": "GPT Analyst",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Analyst": {
+      "main": [
+        [
+          {
+            "node": "GPT Copywriter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Copywriter": {
+      "main": [
+        [
+          {
+            "node": "GPT Skeptic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Skeptic": {
+      "main": [
+        [
+          {
+            "node": "GPT Operator",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT Operator": {
+      "main": [
+        [
+          {
+            "node": "Collect All Outputs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Collect All Outputs": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e8f9a0b1-c2d3-4e5f-6a7b-8c9d0e1f2a3b",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "instanceId": "sequential-multi-gpt-prompt-chain-v1"
+  },
+  "id": "SeqMultiGPTChain01",
+  "tags": []
+}

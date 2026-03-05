@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sequential Multi-GPT Prompt Chain</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+  <header class="app-header">
+    <h1>Sequential Multi-GPT Prompt Chain</h1>
+    <p class="subtitle">5-stage AI expert chain: Strategist &rarr; Analyst &rarr; Copywriter &rarr; Skeptic &rarr; Operator</p>
+  </header>
+
+  <main class="container">
+
+    <section class="config-section">
+      <label for="webhook-url">Webhook URL</label>
+      <input type="url" id="webhook-url" placeholder="https://your-n8n-app.fly.dev/webhook/multi-gpt-chain" value="https://your-n8n-app.fly.dev/webhook/multi-gpt-chain">
+    </section>
+
+    <section class="input-section">
+      <label for="master-prompt">Master Prompt</label>
+      <textarea id="master-prompt" rows="6" placeholder="Enter your master prompt here. Example: I want to launch a B2B SaaS product that helps small accounting firms automate their client onboarding process."></textarea>
+      <div class="input-actions">
+        <button id="run-btn" class="btn-primary">Run Chain</button>
+        <button id="reset-btn" class="btn-secondary" disabled>Reset</button>
+      </div>
+      <p id="error-message" class="error-message" hidden></p>
+    </section>
+
+    <section class="progress-section" id="progress-section" hidden>
+      <h2>Processing</h2>
+      <div class="progress-bar">
+        <div class="stage-indicator" data-stage="strategist">
+          <div class="stage-dot"></div>
+          <span>Strategist</span>
+        </div>
+        <div class="stage-connector"></div>
+        <div class="stage-indicator" data-stage="analyst">
+          <div class="stage-dot"></div>
+          <span>Analyst</span>
+        </div>
+        <div class="stage-connector"></div>
+        <div class="stage-indicator" data-stage="copywriter">
+          <div class="stage-dot"></div>
+          <span>Copywriter</span>
+        </div>
+        <div class="stage-connector"></div>
+        <div class="stage-indicator" data-stage="skeptic">
+          <div class="stage-dot"></div>
+          <span>Skeptic</span>
+        </div>
+        <div class="stage-connector"></div>
+        <div class="stage-indicator" data-stage="operator">
+          <div class="stage-dot"></div>
+          <span>Operator</span>
+        </div>
+      </div>
+      <p class="progress-text" id="progress-text">Starting chain...</p>
+    </section>
+
+    <section class="results-section" id="results-section" hidden>
+      <h2>Results</h2>
+
+      <div class="result-card" data-stage="strategist" hidden>
+        <div class="card-header card-header--strategist" role="button" tabindex="0">
+          <div class="card-header-text">
+            <h3>Stage 1: Strategist</h3>
+            <p class="card-role">Strategic framework and goal definition</p>
+          </div>
+          <span class="expand-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-content" id="result-strategist"></div>
+        </div>
+      </div>
+
+      <div class="result-card" data-stage="analyst" hidden>
+        <div class="card-header card-header--analyst" role="button" tabindex="0">
+          <div class="card-header-text">
+            <h3>Stage 2: Analyst</h3>
+            <p class="card-role">Logic check, gap analysis, strengthened reasoning</p>
+          </div>
+          <span class="expand-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-content" id="result-analyst"></div>
+        </div>
+      </div>
+
+      <div class="result-card" data-stage="copywriter" hidden>
+        <div class="card-header card-header--copywriter" role="button" tabindex="0">
+          <div class="card-header-text">
+            <h3>Stage 3: Copywriter</h3>
+            <p class="card-role">Messaging, positioning, communication clarity</p>
+          </div>
+          <span class="expand-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-content" id="result-copywriter"></div>
+        </div>
+      </div>
+
+      <div class="result-card" data-stage="skeptic" hidden>
+        <div class="card-header card-header--skeptic" role="button" tabindex="0">
+          <div class="card-header-text">
+            <h3>Stage 4: Skeptic</h3>
+            <p class="card-role">Risk assessment, blind spots, failure scenarios</p>
+          </div>
+          <span class="expand-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-content" id="result-skeptic"></div>
+        </div>
+      </div>
+
+      <div class="result-card" data-stage="operator" hidden>
+        <div class="card-header card-header--operator" role="button" tabindex="0">
+          <div class="card-header-text">
+            <h3>Stage 5: Operator</h3>
+            <p class="card-role">Final action plan and execution roadmap</p>
+          </div>
+          <span class="expand-icon">+</span>
+        </div>
+        <div class="card-body">
+          <div class="card-content" id="result-operator"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Powered by n8n + GPT-4o-mini</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
