@@ -69,6 +69,9 @@ export default function LoginPage() {
             placeholder="Your password"
             required
           />
+          <Link href="/forgot-password" className={styles.forgotLink}>
+            Forgot password?
+          </Link>
         </div>
 
         <button className={styles.btnPrimary} type="submit" disabled={loading}>

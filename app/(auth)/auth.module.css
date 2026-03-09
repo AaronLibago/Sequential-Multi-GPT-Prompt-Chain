@@ -156,3 +156,24 @@
   background: #fef2f2;
   border-radius: var(--radius);
 }
+
+.success {
+  color: #166534;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 1rem;
+  background: #f0fdf4;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.forgotLink {
+  font-size: 0.8rem;
+  color: var(--color-primary);
+  text-align: right;
+  text-decoration: none;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
